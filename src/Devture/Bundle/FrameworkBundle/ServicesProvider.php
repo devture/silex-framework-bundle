@@ -1,13 +1,11 @@
 <?php
 namespace Devture\Bundle\FrameworkBundle;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
 use Devture\Component\Form\Twig\FormExtension;
 use Devture\Component\Form\Twig\TokenExtension;
 use Devture\Component\Form\Token\TemporaryTokenManager;
 
-class ServicesProvider implements ServiceProviderInterface {
+class ServicesProvider implements \Pimple\ServiceProviderInterface, \Silex\Api\BootableProviderInterface {
 
 	private $config;
 
@@ -24,30 +22,30 @@ class ServicesProvider implements ServiceProviderInterface {
 		$this->config = $config;
 	}
 
-	public function register(Application $app) {
+	public function register(\Pimple\Container $container) {
 		$config = $this->config;
 
-		$app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
-		$app->register(new \Silex\Provider\ServiceControllerServiceProvider());
+// 		$container->register(new \Silex\Provider\UrlGeneratorServiceProvider());
+		$container->register(new \Silex\Provider\ServiceControllerServiceProvider());
 
-		$app['devture_framework.csrf_token_manager'] = $app->share(function () use ($config) {
+		$container['devture_framework.csrf_token_manager'] = function () use ($config) {
 			return new TemporaryTokenManager($config['token.validity_time'], $config['token.secret'], $config['token.hash_function']);
-		});
+		};
 
-		$app['devture_framework.twig.token_extension'] = $app->share(function ($app) {
-			return new TokenExtension($app['devture_framework.csrf_token_manager']);
-		});
+		$container['devture_framework.twig.token_extension'] = function ($container) {
+			return new TokenExtension($container['devture_framework.csrf_token_manager']);
+		};
 
-		$app['devture_framework.twig.form_extension'] = $app->share(function ($app) {
-			return new FormExtension($app);
-		});
+		$container['devture_framework.twig.form_extension'] = function ($container) {
+			return new FormExtension($container);
+		};
 
-		$app['devture_framework.twig.request_info_extension'] = $app->share(function ($app) {
-			return new Twig\RequestInfoExtension($app);
-		});
+		$container['devture_framework.twig.request_info_extension'] = function ($container) {
+			return new Twig\RequestInfoExtension($container);
+		};
 	}
 
-	public function boot(Application $app) {
+	public function boot(\Silex\Application $app) {
 		if (!isset($app['twig.loader.filesystem'])) {
 			throw new \RuntimeException('Silex\Provider\TwigServiceProvider not registered. Cannot initialize properly.');
 		}

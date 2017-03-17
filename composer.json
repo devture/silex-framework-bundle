@@ -11,9 +11,9 @@
 		}
 	],
 	"require": {
-		"silex/silex": ">=1.0,<1.4",
-		"twig/twig": ">=1.8.0,<2.0-dev",
-		"devture/form": ">=1.0,<1.1"
+		"silex/silex": "^2.0",
+		"twig/twig": ">=1.8.0,<3.0-dev",
+		"devture/form": "^2.0"
 	},
 	"autoload": {
 		"psr-0": {
