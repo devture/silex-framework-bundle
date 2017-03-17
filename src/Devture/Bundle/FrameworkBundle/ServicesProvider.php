@@ -25,7 +25,6 @@ class ServicesProvider implements \Pimple\ServiceProviderInterface, \Silex\Api\B
 	public function register(\Pimple\Container $container) {
 		$config = $this->config;
 
-// 		$container->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 		$container->register(new \Silex\Provider\ServiceControllerServiceProvider());
 
 		$container['devture_framework.csrf_token_manager'] = function () use ($config) {
