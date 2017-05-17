@@ -45,6 +45,12 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app['devture_framework.twig.request_info_extension'] = $app->share(function ($app) {
 			return new Twig\RequestInfoExtension($app);
 		});
+
+		$app['devture_framework.console_command.twig_lint'] = function ($app) {
+			$command = new \Symfony\Bridge\Twig\Command\LintCommand();
+			$command->setTwigEnvironment($app['twig']);
+			return $command;
+		};
 	}
 
 	public function boot(Application $app) {
@@ -58,6 +64,10 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app['twig']->addExtension($app['devture_framework.twig.form_extension']);
 		$app['twig']->addExtension($app['devture_framework.twig.token_extension']);
 		$app['twig']->addExtension($app['devture_framework.twig.request_info_extension']);
+
+		if (isset($app['console'])) {
+			$app['console']->add($app['devture_framework.console_command.twig_lint']);
+		}
 	}
 
 }
