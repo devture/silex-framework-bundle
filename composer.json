@@ -13,6 +13,7 @@
 	"require": {
 		"silex/silex": "^2.0",
 		"twig/twig": ">=1.8.0,<3.0-dev",
+		"symfony/twig-bridge": ">=2.2,<3.3-dev",
 		"devture/form": "^2.0"
 	},
 	"autoload": {

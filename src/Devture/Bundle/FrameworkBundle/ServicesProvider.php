@@ -42,6 +42,12 @@ class ServicesProvider implements \Pimple\ServiceProviderInterface, \Silex\Api\B
 		$container['devture_framework.twig.request_info_extension'] = function ($container) {
 			return new Twig\RequestInfoExtension($container);
 		};
+
+		$container['devture_framework.console_command.twig_lint'] = function ($container) {
+			$command = new \Symfony\Bridge\Twig\Command\LintCommand();
+			$command->setTwigEnvironment($container['twig']);
+			return $command;
+		};
 	}
 
 	public function boot(\Silex\Application $app) {
@@ -55,6 +61,10 @@ class ServicesProvider implements \Pimple\ServiceProviderInterface, \Silex\Api\B
 		$app['twig']->addExtension($app['devture_framework.twig.form_extension']);
 		$app['twig']->addExtension($app['devture_framework.twig.token_extension']);
 		$app['twig']->addExtension($app['devture_framework.twig.request_info_extension']);
+
+		if (isset($app['console'])) {
+			$app['console']->add($app['devture_framework.console_command.twig_lint']);
+		}
 	}
 
 }
