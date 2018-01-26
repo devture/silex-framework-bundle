@@ -3,11 +3,11 @@
 	"type": "library",
 	"description": "Silex bundle initializing the environment and hooking up a few base components",
 	"keywords": ["silex", "bundle"],
-	"license": "BSD",
+	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "Slavi Pantaleev",
-			"email": "s.pantaleev@gmail.com"
+			"email": "slavi@devture.com"
 		}
 	],
 	"require": {
